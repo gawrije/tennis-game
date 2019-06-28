@@ -35,7 +35,10 @@ export default class Match {
             }
         }
         
-        // TODO: tiebreak check
+        // tiebreak 6-6
+        if ((this.player1.gamesWon === this.player2.gamesWon) && (this.player1.gamesWon >= 6 && this.player2.gamesWon >= 6)) { 
+            this.set.tieBreak = true;
+        }
     }
 
     getLeadingPlayer() {
@@ -57,7 +60,13 @@ export default class Match {
     }
 
     calculateTieBreakScore() {
-       // TODO:
+        if (this.player1.winPointScore >= 7 || this.player2.winPointScore >=7) {
+            if (Math.abs(this.player1.winPointScore - this.player2.winPointScore) >= 2) { // Won 
+                const leadPlayer = this.getLeadingPlayer();
+                leadPlayer.gamesWon += 1;
+                this.set.won = true;
+            }
+        }
     }
 
     calculateStandardGameScore() {
@@ -107,7 +116,6 @@ export default class Match {
         }else{
             console.log("The set is completed.");
         }
-        
     }
 
     score() {
@@ -119,7 +127,9 @@ export default class Match {
                 gamesWon =  gamesWon +  ", " + this.currentGameScore
             }
 
-            // TODO: tiebreak
+            if (this.set.tieBreak ) {
+                gamesWon = gamesWon + " (" + this.player1.winPointScore + "-" + this.player2.winPointScore + ") - Tiebreak";
+            }
 
             console.log(gamesWon);
             return gamesWon;
@@ -127,6 +137,5 @@ export default class Match {
             console.log("The set is won. (" + gamesWon + ")");
             return "The set is won. (" + gamesWon + ")";
         }
-
     }
 }
